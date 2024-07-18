@@ -22,7 +22,7 @@ public class MouseLook : MonoBehaviour
         float mouseY = look.y * sensitivity * Time.deltaTime;
 
         xRotation -= mouseY; // get rotation of object, not mouse move
-        xRotation = Mathf.Clamp(xRotation, -90, 90);        
+        xRotation = Mathf.Clamp(xRotation, -90, 90);
 
         playerBody.Rotate(new Vector2(0, mouseX));
         transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
