@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 public class Hand : MonoBehaviour
 {
-    public Action interaction;
+    public Action<int> attack;
 
     [Header("References")]
     [SerializeField] InputActionReference clickAction;
@@ -22,8 +22,7 @@ public class Hand : MonoBehaviour
     {
         clickAction.action.started += (InputAction.CallbackContext obj) =>
         {
-            print("click");
-            interaction?.Invoke();
+            attack?.Invoke(10);
             animator.CrossFade(itemInHand.useAnimation.name, 0);
         };
     }

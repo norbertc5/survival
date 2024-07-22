@@ -1,11 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Crate : MonoBehaviour, IDamageable
 {
-    public void GetDamage()
+    [SerializeField] int maxHealth = 100;
+
+    int health;
+    public int Health { get { return health; } set { health = value; } }
+    ItemsHealthBar healthBar;
+
+    void Start()
     {
-        print($"got damage");
+        healthBar = FindObjectOfType<ItemsHealthBar>();
+        Health = maxHealth;
+    }
+
+    public void GetDamage(int amount)
+    {
+        Health -= amount;
+        healthBar.SetHealthBar(transform.position, (float)Health/100);
+        print($"got {amount} damage. Remain {Health} health.");
     }
 }

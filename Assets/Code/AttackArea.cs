@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HandArea : MonoBehaviour
+public class AttackArea : MonoBehaviour
 {
     Hand handScript;
 
@@ -17,7 +17,7 @@ public class HandArea : MonoBehaviour
         IDamageable damageable = other.GetComponent<IDamageable>();
         if(damageable != null)
         {
-            handScript.interaction += damageable.GetDamage;
+            handScript.attack += damageable.GetDamage;
         }
     }
 
@@ -26,7 +26,7 @@ public class HandArea : MonoBehaviour
         IDamageable damageable = other.GetComponent<IDamageable>();
         if (damageable != null)
         {
-            handScript.interaction -= damageable.GetDamage;
+            handScript.attack -= damageable.GetDamage;
         }
     }
 }
