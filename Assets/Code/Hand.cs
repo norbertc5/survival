@@ -1,6 +1,5 @@
+using norbertcUtilities.ActionOnTime;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -22,8 +21,13 @@ public class Hand : MonoBehaviour
     {
         clickAction.action.started += (InputAction.CallbackContext obj) =>
         {
-            attack?.Invoke(10);
             animator.CrossFade(itemInHand.useAnimation.name, 0);
         };
+    }
+
+    public void InvokeAttack()
+    {
+        // attack is invoking via animation 
+        attack?.Invoke(10);
     }
 }
