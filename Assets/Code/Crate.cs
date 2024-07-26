@@ -22,7 +22,7 @@ public class Crate : MonoBehaviour, IDamageable
     public void GetDamage(int amount)
     {
         Health -= amount;
-        healthBar.SetHealthBar(transform.position, (float)Health/100);
+        healthBar.SetBar(UIBar.ValueToBarFill(Health, maxHealth), transform.position);
 
         MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
         Material defaultMaterial = meshRenderer.material;

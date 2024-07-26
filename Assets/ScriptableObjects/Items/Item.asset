@@ -13,4 +13,6 @@ MonoBehaviour:
   m_Name: Item
   m_EditorClassIdentifier: 
   model: {fileID: 2198313782341279214, guid: 46624f345d7d2f84ca082f0ef6a7ddd5, type: 3}
-  useAnimation: {fileID: 7400000, guid: ca681c62cb975d24f99cc7f32bf2a0db, type: 2}
+  attackAnimation: {fileID: 7400000, guid: ca681c62cb975d24f99cc7f32bf2a0db, type: 2}
+  staminaDemand: 1
+  damage: 20
