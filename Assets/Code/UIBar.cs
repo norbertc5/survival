@@ -1,8 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
+using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.ProBuilder.AutoUnwrapSettings;
 
 [RequireComponent(typeof(CanvasGroup))]
 public class UIBar : MonoBehaviour
@@ -11,10 +14,11 @@ public class UIBar : MonoBehaviour
     Image bar;
     Image background;
     Coroutine backgroundBlinkRoutine;
+    Coroutine dissolveRoutine;
+    TextMeshProUGUI valueText;
 
     [SerializeField] float timeToDssolve = 3;
     [SerializeField] float dissolveSpeed = 1;
-    bool isPerformingBlink;
     Color32 defaultBackgroundColor;
 
     private void Awake()
@@ -22,6 +26,7 @@ public class UIBar : MonoBehaviour
         canvasGroup = GetComponent<CanvasGroup>();
         bar = transform.Find("Bar").GetComponent<Image>();
         background = transform.Find("Bg").GetComponent<Image>();
+        valueText = GetComponentInChildren<TextMeshProUGUI>();
     }
 
     private void Start()
@@ -31,16 +36,28 @@ public class UIBar : MonoBehaviour
 
     public virtual void SetBar(float fill)
     {
-        bar.fillAmount = fill;
-        StopAllCoroutines();
-        StartCoroutine(Dissolve());
+        HandleSetBar(fill);
     }
 
     public virtual void SetBar(float fill, Vector3 pos)
     {
+        // overload is to make possiblity to override in inherit classes
+        HandleSetBar(fill);
+    }
+
+    void HandleSetBar(float fill)
+    {
         bar.fillAmount = fill;
-        StopAllCoroutines();
-        StartCoroutine(Dissolve());
+        if (valueText != null)
+        {
+            valueText.text = (fill*10).ToString();
+        }
+    }
+
+    public void Show()
+    {
+        if (dissolveRoutine != null) StopCoroutine(dissolveRoutine);
+        dissolveRoutine = StartCoroutine(Dissolve());
     }
 
     IEnumerator Dissolve()
@@ -83,7 +100,7 @@ public class UIBar : MonoBehaviour
     public void BackgroundBlink(Color32 blinkColor, int amount, float duration)
     {
         if (backgroundBlinkRoutine != null) StopCoroutine(backgroundBlinkRoutine);
-        if (!isPerformingBlink) backgroundBlinkRoutine = StartCoroutine(BackgroundBlinkRoutine(blinkColor, amount, duration));
+        backgroundBlinkRoutine = StartCoroutine(BackgroundBlinkRoutine(blinkColor, amount, duration));
     }
 
     IEnumerator BackgroundBlinkRoutine(Color32 blinkColor, int amount, float duration)

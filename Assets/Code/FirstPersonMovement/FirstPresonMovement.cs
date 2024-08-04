@@ -18,6 +18,8 @@ namespace norbertcUtilities.FirstPersonMovement
         float movementSpeed;
         [SerializeField] float footstepDelayFactor = 0.5f;
         bool hasLanded;
+        bool isRunning;
+        [SerializeField] int runStaminaTakeDelay = 1;
 
         [Tooltip("Ground attracting when player's on the ground")]
         const float DEFAULT_GROUND_ATTRACTING = -2;
@@ -30,6 +32,7 @@ namespace norbertcUtilities.FirstPersonMovement
         [Tooltip("If hit a 'ceiling' during jump, should immediately fall to the ground, and it makes is.")]
         [SerializeField] Transform ceilingCheck;
         AudioSource source;
+        Player player;
 
         [Header("Movement SFX")]
         [SerializeField] AudioClip footstep1;
@@ -40,6 +43,7 @@ namespace norbertcUtilities.FirstPersonMovement
         {
             characterController = GetComponent<CharacterController>();
             source = GetComponent<AudioSource>();
+            player = GetComponent<Player>();
         }
 
         private void Start()
@@ -60,12 +64,17 @@ namespace norbertcUtilities.FirstPersonMovement
             runAction.action.started += (InputAction.CallbackContext obj) =>
             {
                 if (characterController.isGrounded)
+                {
                     movementSpeed = runSpeed;
+                    isRunning = true;
+                    StartCoroutine(RunStaminaImpact());
+                }
             };
 
             runAction.action.canceled += (InputAction.CallbackContext obj) =>
             {
                 movementSpeed = walkSpeed;
+                isRunning = false;
             };
             #endregion
 
@@ -125,6 +134,22 @@ namespace norbertcUtilities.FirstPersonMovement
                         source.PlayOneShot(footstep1);
                 }
                 yield return new WaitForSeconds(1 / (movementSpeed * footstepDelayFactor));
+            }
+        }
+
+        IEnumerator RunStaminaImpact()
+        {
+            while (isRunning)
+            {
+                player.ActionWithStamina(() => { }, 1);
+                
+                if (player.Stamina <= 0)
+                {
+                    movementSpeed = walkSpeed;
+                    isRunning = false;
+                }
+
+                yield return new WaitForSeconds(runStaminaTakeDelay);
             }
         }
     }

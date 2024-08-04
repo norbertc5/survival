@@ -3166,6 +3166,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 119
   footstepDelayFactor: 0.5
+  runStaminaTakeDelay: 1
   movementAction: {fileID: 6864808065162159349, guid: 36b7930dc5620ea45a0f5f1e8b114296,
     type: 3}
   jumpAction: {fileID: 6469060437787339799, guid: 36b7930dc5620ea45a0f5f1e8b114296,

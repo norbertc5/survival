@@ -14,6 +14,7 @@ public class ItemsHealthBar : UIBar
     public override void SetBar(float fill, Vector3 pos)
     {
         base.SetBar(fill);
+        Show();
         transform.position = pos + Vector3.up;
     }
 }
