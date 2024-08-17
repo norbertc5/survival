@@ -11,7 +11,10 @@ public class HandSway : MonoBehaviour
 
     void Update()
     {
-        Vector2 look = lookAction.action.ReadValue<Vector2>() * swayMultiplayer;
+        Vector2 look = Vector2.zero;
+
+        if(!Player.isPlayerFreeze)
+            look = lookAction.action.ReadValue<Vector2>() * swayMultiplayer;
 
         Quaternion rotationX = Quaternion.AngleAxis(-look.y, Vector3.right);
         Quaternion rotationY = Quaternion.AngleAxis(look.x, Vector3.up);

@@ -1,22 +1,74 @@
+using norbertcUtilities.FirstPersonMovement;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
+    [Header("Stamina")]
     [SerializeField] int maxStamina = 10;
     [SerializeField] float timeToRestoreStamina = 2;
     [SerializeField] float staminaRestoringSpeed = 0.5f;
-    [SerializeField] UIBar staminaBar;
     Coroutine restoreStaminaRoutine;
+    public static int Stamina { get; private set; }
 
-    public int Stamina { get; private set; }
+    [Header("Interaction")]
+    [SerializeField] float interactionDistance = 10;
+
+    public static bool isPlayerFreeze;
+
+    [Header("References")]
+    [SerializeField] UIBar staminaBar;
+    InteractionItemNameDisplay interactionItemNameDisplay;
+    Transform selectedItem;
+    [SerializeField] InputActionReference interactionAction;
+    Inventory inventory;
+    FirstPresonMovement firstPresonMovement;
+    MouseLook mouseLook;
+    public static Player player;
 
     private void Start()
     {
         Stamina = maxStamina;
         staminaBar.Hide();
+        interactionItemNameDisplay = FindObjectOfType<InteractionItemNameDisplay>();
+        inventory = GetComponent<Inventory>();
+        firstPresonMovement = GetComponent<FirstPresonMovement>();
+        mouseLook = FindObjectOfType<MouseLook>();
+        player = this;
+
+        interactionAction.action.started += (InputAction.CallbackContext obj) =>
+        {
+            if (selectedItem == null)
+                return;
+
+            //print("add here");
+            Inventory.AddToInventory(selectedItem.GetComponent<ItemOnGround>().item);
+            //inventory.items.Add(selectedItem.GetComponent<ItemOnGround>().item);
+            selectedItem.gameObject.SetActive(false);
+            selectedItem = null;
+        };
+    }
+
+    private void FixedUpdate()
+    {
+        Transform camera = Camera.main.transform;
+        Physics.Raycast(camera.position, camera.forward, out RaycastHit hit, interactionDistance);
+
+        if (hit.transform != null && hit.transform.CompareTag("ItemOnGround"))
+        {
+            interactionItemNameDisplay.ShowAndSet(hit.transform.GetComponent<ItemOnGround>().item.name);
+            selectedItem = hit.transform;
+            selectedItem.SendMessage("EnableOutline");
+        }
+        else
+        {
+            if (selectedItem != null) selectedItem.SendMessage("DisableOutline");
+            interactionItemNameDisplay.Hide();
+        }
     }
 
     /// <summary>
@@ -24,13 +76,16 @@ public class Player : MonoBehaviour
     /// </summary>
     /// <param name="action"></param>
     /// <param name="staminaDemand"></param>
-    public void ActionWithStamina(Action action, int staminaDemand)
+    public static void ActionWithStamina(Action action, int staminaDemand)
     {
+        if (isPlayerFreeze)
+            return;
+
         // if this action make stamina equals or less than 0, blink the bar
         if ((Stamina - staminaDemand) <= 0)
         {
-            staminaBar.Show();
-            staminaBar.BackgroundBlink(new Color32(255, 0, 0, 1), 3, .2f);
+            player.staminaBar.Show();
+            player.staminaBar.BackgroundBlink(new Color32(255, 0, 0, 1), 3, .2f);
         }
 
         // if not enough stamina to perform action, return
@@ -40,12 +95,12 @@ public class Player : MonoBehaviour
         // perform action
         action();
         Stamina -= staminaDemand;
-        staminaBar.SetBar(UIBar.ValueToBarFill(Stamina, maxStamina));
-        staminaBar.Show();
+        player.staminaBar.SetBar(UIBar.ValueToBarFill(Stamina, player.maxStamina));
+        player.staminaBar.Show();
 
         // restoring stamina
-        if (restoreStaminaRoutine != null) StopCoroutine(restoreStaminaRoutine);
-        restoreStaminaRoutine = StartCoroutine(RestoreStamina());
+        if (player.restoreStaminaRoutine != null) player.StopCoroutine(player.restoreStaminaRoutine);
+        player.restoreStaminaRoutine = player.StartCoroutine(player.RestoreStamina());
     }
 
     IEnumerator RestoreStamina()
@@ -57,5 +112,13 @@ public class Player : MonoBehaviour
             staminaBar.SetBar(UIBar.ValueToBarFill(Stamina, maxStamina));
             yield return new WaitForSeconds(staminaRestoringSpeed);
         }
+    }
+
+    public static void Freeze(bool value)
+    {
+        isPlayerFreeze = value;
+        Cursor.lockState = value ? CursorLockMode.None : CursorLockMode.Locked;
+        player.firstPresonMovement.enabled = !value;
+        player.mouseLook.enabled = !value;
     }
 }

@@ -12,7 +12,6 @@ public class Hand : MonoBehaviour
     [SerializeField] InputActionReference clickAction;
     [SerializeField] Item itemInHand;
     Animator animator;
-    Player player;
 
     private void Awake()
     {
@@ -23,15 +22,13 @@ public class Hand : MonoBehaviour
     {
         clickAction.action.started += (InputAction.CallbackContext obj) =>
         {
-            if(canPerformClickAction)
+            if(canPerformClickAction && !Player.isPlayerFreeze)
             {
-                player.ActionWithStamina(() => animator.CrossFade(itemInHand.attackAnimation.name, 0), itemInHand.staminaDemand);
+                Player.ActionWithStamina(() => animator.CrossFade(itemInHand.attackAnimation.name, 0), itemInHand.staminaDemand);
                 canPerformClickAction = false;
                 ActionOnTime.Create(() => { canPerformClickAction = true; }, itemInHand.attackAnimation.length);
             }
         };
-
-        player = FindObjectOfType<Player>();
     }
 
     public void InvokeAttack()

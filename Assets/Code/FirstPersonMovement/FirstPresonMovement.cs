@@ -32,7 +32,6 @@ namespace norbertcUtilities.FirstPersonMovement
         [Tooltip("If hit a 'ceiling' during jump, should immediately fall to the ground, and it makes is.")]
         [SerializeField] Transform ceilingCheck;
         AudioSource source;
-        Player player;
 
         [Header("Movement SFX")]
         [SerializeField] AudioClip footstep1;
@@ -43,7 +42,6 @@ namespace norbertcUtilities.FirstPersonMovement
         {
             characterController = GetComponent<CharacterController>();
             source = GetComponent<AudioSource>();
-            player = GetComponent<Player>();
         }
 
         private void Start()
@@ -124,7 +122,8 @@ namespace norbertcUtilities.FirstPersonMovement
             int stepAmount = 0;
             while (true)
             {
-                if (movementAction.action.ReadValue<Vector2>().x > 0 || movementAction.action.ReadValue<Vector2>().y > 0 && characterController.isGrounded)
+                if (movementAction.action.ReadValue<Vector2>().x > 0 || movementAction.action.ReadValue<Vector2>().y > 0
+                    && characterController.isGrounded && !Player.isPlayerFreeze)
                 {
                     stepAmount++;
 
@@ -141,14 +140,13 @@ namespace norbertcUtilities.FirstPersonMovement
         {
             while (isRunning)
             {
-                player.ActionWithStamina(() => { }, 1);
+                Player.ActionWithStamina(() => { }, 1);
                 
-                if (player.Stamina <= 0)
+                if (Player.Stamina <= 0)
                 {
                     movementSpeed = walkSpeed;
                     isRunning = false;
                 }
-
                 yield return new WaitForSeconds(runStaminaTakeDelay);
             }
         }
