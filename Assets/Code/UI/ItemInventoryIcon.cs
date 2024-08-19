@@ -3,29 +3,26 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ItemIconDragDrop : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
+public class ItemInventoryIcon : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
     RectTransform rectTrans;
     Canvas canvas;
     CanvasGroup canvasGroup;
-    Transform parent;
+    public ItemCell referenceCell;
     Image image;
 
     Vector2 originPos;
     public static Action dragAction;
     public static Action dropAction;
 
-    void Awake()
+    void Start()
     {
         rectTrans = GetComponent<RectTransform>();
         canvas = GameObject.FindWithTag("UICanvas").GetComponent<Canvas>();
         canvasGroup = GetComponent<CanvasGroup>();
         image = GetComponent<Image>();
-    }
 
-    void Start()
-    {
-        parent = rectTrans.parent;
+        referenceCell = rectTrans.GetComponentInParent<ItemCell>();
         dragAction += () => { canvasGroup.blocksRaycasts = false; };
         dropAction += () => { canvasGroup.blocksRaycasts = true; };
     }
@@ -46,7 +43,7 @@ public class ItemIconDragDrop : MonoBehaviour, IDragHandler, IBeginDragHandler, 
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        rectTrans.SetParent(parent);  // image goes back to origin parent 
+        rectTrans.SetParent(referenceCell.transform);  // image goes back to origin parent 
         rectTrans.position = originPos;
         dropAction?.Invoke();
     }

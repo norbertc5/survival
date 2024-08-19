@@ -20,6 +20,7 @@ namespace norbertcUtilities.FirstPersonMovement
         bool hasLanded;
         bool isRunning;
         [SerializeField] int runStaminaTakeDelay = 1;
+        public bool canMove = true;
 
         [Tooltip("Ground attracting when player's on the ground")]
         const float DEFAULT_GROUND_ATTRACTING = -2;
@@ -51,7 +52,7 @@ namespace norbertcUtilities.FirstPersonMovement
             #region Jump handle
             jumpAction.action.started += (InputAction.CallbackContext obj) =>
             {
-                if (characterController.isGrounded)
+                if (characterController.isGrounded && canMove)
                 {
                     velocityY = Mathf.Sqrt(jumpHeight * DEFAULT_GROUND_ATTRACTING * gravity);
                 }
@@ -61,7 +62,7 @@ namespace norbertcUtilities.FirstPersonMovement
             #region Run handle
             runAction.action.started += (InputAction.CallbackContext obj) =>
             {
-                if (characterController.isGrounded)
+                if (characterController.isGrounded && canMove)
                 {
                     movementSpeed = runSpeed;
                     isRunning = true;
@@ -86,7 +87,7 @@ namespace norbertcUtilities.FirstPersonMovement
                 movementAction.action.ReadValue<Vector2>().y) * movementSpeed * Time.deltaTime;
 
             move = transform.TransformDirection(move); // move with player's rotation
-            characterController.Move(move);
+            if(canMove) characterController.Move(move);
             #endregion
 
             #region Jump and gravity

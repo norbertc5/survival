@@ -5,6 +5,8 @@ using UnityEngine.UI;
 public class ItemCell : MonoBehaviour, IDropHandler
 {
     Image icon;
+    [SerializeField] bool isHandCell;
+    public Item itemInCell;
 
     void Start()
     {
@@ -20,10 +22,32 @@ public class ItemCell : MonoBehaviour, IDropHandler
             return;
         }
 
-        // swap icons' sprites
-        icon.enabled = true;
-        Sprite tmp = eventData.pointerDrag.GetComponent<Image>().sprite;
-        eventData.pointerDrag.GetComponent<Image>().sprite = icon.sprite;
-        icon.sprite = tmp;
+        // swap item attached to this cell
+        Item tmp = eventData.pointerDrag.GetComponent<ItemInventoryIcon>().referenceCell.itemInCell;
+        eventData.pointerDrag.GetComponent<ItemInventoryIcon>().referenceCell.SetItem(itemInCell);
+        SetItem(tmp);
+    }
+
+    /// <summary>
+    /// Set item which is in this cell.
+    /// </summary>
+    /// <param name="item"></param>
+    public void SetItem(Item item)
+    {
+        itemInCell = item;
+
+        if (isHandCell)
+            Hand.UpdateItemInHand(itemInCell);
+
+        // change sprite of the icon (or not if no item)
+        try
+        {
+            icon.sprite = item.uIIcon;
+            icon.enabled = true;
+        }
+        catch
+        {
+            icon.sprite = null;
+        }
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
 [CreateAssetMenu(fileName="Item")]
@@ -11,4 +12,5 @@ public class Item : ScriptableObject
     public Sprite uIIcon;
     public int staminaDemand = 1;
     public int damage = 10;
+    public bool isHandable;
 }

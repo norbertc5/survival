@@ -25,7 +25,6 @@ public class Player : MonoBehaviour
     InteractionItemNameDisplay interactionItemNameDisplay;
     Transform selectedItem;
     [SerializeField] InputActionReference interactionAction;
-    Inventory inventory;
     FirstPresonMovement firstPresonMovement;
     MouseLook mouseLook;
     public static Player player;
@@ -35,7 +34,6 @@ public class Player : MonoBehaviour
         Stamina = maxStamina;
         staminaBar.Hide();
         interactionItemNameDisplay = FindObjectOfType<InteractionItemNameDisplay>();
-        inventory = GetComponent<Inventory>();
         firstPresonMovement = GetComponent<FirstPresonMovement>();
         mouseLook = FindObjectOfType<MouseLook>();
         player = this;
@@ -45,9 +43,7 @@ public class Player : MonoBehaviour
             if (selectedItem == null)
                 return;
 
-            //print("add here");
             Inventory.AddToInventory(selectedItem.GetComponent<ItemOnGround>().item);
-            //inventory.items.Add(selectedItem.GetComponent<ItemOnGround>().item);
             selectedItem.gameObject.SetActive(false);
             selectedItem = null;
         };
@@ -118,7 +114,7 @@ public class Player : MonoBehaviour
     {
         isPlayerFreeze = value;
         Cursor.lockState = value ? CursorLockMode.None : CursorLockMode.Locked;
-        player.firstPresonMovement.enabled = !value;
+        player.firstPresonMovement.canMove = !value;
         player.mouseLook.enabled = !value;
     }
 }

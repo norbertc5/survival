@@ -1,3 +1,4 @@
+using norbertcUtilities.ActionOnTime;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -17,7 +18,7 @@ public class Inventory : MonoBehaviour
     public List<Item> items = new List<Item>();
     bool isInventoryOpen;
     [SerializeField] int inventoryCapacity = 9;
-    List<Image> icons = new List<Image>();
+    List<ItemCell> cells = new List<ItemCell>();
 
     private void Start()
     {
@@ -30,38 +31,37 @@ public class Inventory : MonoBehaviour
             Player.Freeze(isInventoryOpen);
         };
 
+        // get ui inventory cells
         for (int i = 0; i < inventoryCapacity; i++)
         {
-            icons.Add(cellsContainer.transform.GetChild(i).GetChild(0).GetComponent<Image>());
-            //icons[i].color = Color.red;
+            cells.Add(cellsContainer.transform.GetChild(i).GetComponent<ItemCell>());
         }
+
+        // lets to set up ui inventory elements
+        inventoryContainer.SetActive(true);
+        ActionOnTime.Create(() => { inventoryContainer.SetActive(false); }, .01f);
     }
 
     public static void AddToInventory(Item item)
     {
         if (inventory.items.Count >= inventory.inventoryCapacity)
         {
-            print("return");
             return;
         }
 
-        //inventory.items.Add(item, 1);
         inventory.items.Add(item);
-        //inventory.inventoryCapacity = inventory.items.Count;
-        print(item.name);
-        Image iconImg = inventory.GetFirstFreeCellIcon();
-        iconImg.sprite = item.uIIcon;
-        iconImg.enabled = true;
+        ItemCell freeCell = inventory.GetFirstFreeCell();
+        freeCell.SetItem(item);
     }
 
-    Image GetFirstFreeCellIcon()
+    ItemCell GetFirstFreeCell()
     {
         for (int i = 0; i < inventoryCapacity; i++)
         {
-            Image icon = icons[i];
-            if(icon.sprite == null)
+            ItemCell cell = cells[i];
+            if(cell.itemInCell == null)
             {
-                return icon;
+                return cell;
             }
         }
         return null;
