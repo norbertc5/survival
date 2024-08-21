@@ -62,7 +62,7 @@ namespace norbertcUtilities.FirstPersonMovement
             #region Run handle
             runAction.action.started += (InputAction.CallbackContext obj) =>
             {
-                if (characterController.isGrounded && canMove)
+                if (characterController.isGrounded && canMove && movementAction.action.ReadValue<Vector2>().y > 0)
                 {
                     movementSpeed = runSpeed;
                     isRunning = true;
@@ -88,6 +88,10 @@ namespace norbertcUtilities.FirstPersonMovement
 
             move = transform.TransformDirection(move); // move with player's rotation
             if(canMove) characterController.Move(move);
+
+            // stop running when WASD is no longer being used
+            if (movementAction.action.ReadValue<Vector2>().y <= 0)
+                isRunning = false;
             #endregion
 
             #region Jump and gravity

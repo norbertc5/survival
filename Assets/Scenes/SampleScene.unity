@@ -4815,6 +4815,8 @@ MonoBehaviour:
   clickAction: {fileID: -5642179165912092515, guid: 36b7930dc5620ea45a0f5f1e8b114296,
     type: 3}
   itemInHand: {fileID: 0}
+  hideShowItemAnimation: {fileID: 7400000, guid: 5866ea97719224c47bf1b9ac90e8ae72,
+    type: 2}
 --- !u!1001 &8609174859214623114
 PrefabInstance:
   m_ObjectHideFlags: 0

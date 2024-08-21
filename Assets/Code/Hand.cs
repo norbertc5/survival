@@ -16,6 +16,7 @@ public class Hand : MonoBehaviour
     Animator animator;
     public static Hand hand;
     List<Item> items = new List<Item>(1);
+    [SerializeField] AnimationClip hideShowItemAnimation;
 
     private void Awake()
     {
@@ -58,15 +59,22 @@ public class Hand : MonoBehaviour
     public static void UpdateItemInHand(Item newItem)
     {
         hand.itemInHand = newItem;
+        hand.animator.CrossFade("hide", 0);
 
         if (newItem != null)
+        {
             hand.transform.Find(newItem.name).gameObject.SetActive(true);
+            hand.animator.CrossFade("show", 0);
+        }
         else
         {
-            for (int i = 0; i < hand.transform.childCount; i++)
+            ActionOnTime.Create(() =>
             {
-                hand.transform.GetChild(i).gameObject.SetActive(false);
-            }
+                for (int i = 0; i < hand.transform.childCount; i++)
+                {
+                    hand.transform.GetChild(i).gameObject.SetActive(false);
+                }
+            }, hand.hideShowItemAnimation.length);
         }
     }
 }

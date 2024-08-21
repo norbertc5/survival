@@ -1,11 +1,7 @@
 using norbertcUtilities.ActionOnTime;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.ProBuilder.Shapes;
-using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
@@ -14,7 +10,6 @@ public class Inventory : MonoBehaviour
     [SerializeField] GameObject inventoryContainer;
     [SerializeField] GameObject cellsContainer;
 
-    //public Dictionary<Item, int> items = new Dictionary<Item, int>();
     public List<Item> items = new List<Item>();
     bool isInventoryOpen;
     [SerializeField] int inventoryCapacity = 9;
