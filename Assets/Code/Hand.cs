@@ -56,15 +56,22 @@ public class Hand : MonoBehaviour
         attack?.Invoke(itemInHand.damage);
     }
 
-    public static void UpdateItemInHand(Item newItem)
+    public static void SetItemInHand(Item newItem)
     {
+        Item oldItem = hand.itemInHand;
+        if (oldItem) hand.animator.CrossFade("hide", 0);  // if player has on old item in hand, play hide anim
+
         hand.itemInHand = newItem;
-        hand.animator.CrossFade("hide", 0);
+        ActionOnTime.Stop("SetItemInHand");  // repairs issue with no model while item was in hand
 
         if (newItem != null)
         {
             hand.transform.Find(newItem.name).gameObject.SetActive(true);
-            hand.animator.CrossFade("show", 0);
+
+            // if we have item in our hand, wait till hide anim ends and then play show one
+            // but if no item in hand, no hide anim, so don't need to wait :)
+            float t = oldItem ? hand.hideShowItemAnimation.length : 0;
+            ActionOnTime.Create(() => hand.animator.CrossFade("show", 0), t);
         }
         else
         {
@@ -74,7 +81,7 @@ public class Hand : MonoBehaviour
                 {
                     hand.transform.GetChild(i).gameObject.SetActive(false);
                 }
-            }, hand.hideShowItemAnimation.length);
+            }, hand.hideShowItemAnimation.length, "SetItemInHand");
         }
     }
 }

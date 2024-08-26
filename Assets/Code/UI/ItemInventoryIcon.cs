@@ -29,7 +29,7 @@ public class ItemInventoryIcon : MonoBehaviour, IDragHandler, IBeginDragHandler,
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        rectTrans.SetParent(rectTrans.parent.parent.parent);  // change parent to display icon above cells
+        rectTrans.SetParent(rectTrans.parent.parent.parent.parent);  // change parent to display icon above cells
         originPos = rectTrans.position;
         image.enabled = true;
         dragAction?.Invoke();  // make possibility to interact with cells by disabling blocksRaycasts in all icons

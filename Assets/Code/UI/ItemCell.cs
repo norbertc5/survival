@@ -5,8 +5,8 @@ using UnityEngine.UI;
 public class ItemCell : MonoBehaviour, IDropHandler
 {
     Image icon;
-    [SerializeField] bool isHandCell;
     public Item itemInCell;
+    public bool isSelectedCell;
 
     void Start()
     {
@@ -24,26 +24,35 @@ public class ItemCell : MonoBehaviour, IDropHandler
 
         // swap item attached to this cell
         Item tmp = eventData.pointerDrag.GetComponent<ItemInventoryIcon>().referenceCell.itemInCell;
-        eventData.pointerDrag.GetComponent<ItemInventoryIcon>().referenceCell.SetItem(itemInCell);
-        SetItem(tmp);
+        eventData.pointerDrag.GetComponent<ItemInventoryIcon>().referenceCell.SetItemInCell(itemInCell);
+        SetItemInCell(tmp);
+
+        // if item dropped on this cell was previously on selected one, change item in hand according to item from selected one
+        if (eventData.pointerDrag.GetComponent<ItemInventoryIcon>().referenceCell.isSelectedCell)
+        {
+            Hand.SetItemInHand(QuickAccessInventory.selectedCell.itemInCell);
+        }
     }
 
     /// <summary>
     /// Set item which is in this cell.
     /// </summary>
     /// <param name="item"></param>
-    public void SetItem(Item item)
+    public void SetItemInCell(Item item)
     {
         itemInCell = item;
-
-        if (isHandCell)
-            Hand.UpdateItemInHand(itemInCell);
 
         // change sprite of the icon (or not if no item)
         try
         {
             icon.sprite = item.uIIcon;
             icon.enabled = true;
+
+            // set item in hand right after drop on selected cell
+            if (isSelectedCell)
+            {
+                Hand.SetItemInHand(itemInCell);
+            }
         }
         catch
         {

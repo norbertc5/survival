@@ -3,19 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Inventory : MonoBehaviour
+public class Inventory : InventoryUIBase
 {
     public static Inventory inventory;
     [SerializeField] InputActionReference inventoryToggleAction;
     [SerializeField] GameObject inventoryContainer;
-    [SerializeField] GameObject cellsContainer;
 
     public List<Item> items = new List<Item>();
     bool isInventoryOpen;
-    [SerializeField] int inventoryCapacity = 9;
-    List<ItemCell> cells = new List<ItemCell>();
 
-    private void Start()
+    protected override void Start()
     {
         inventory = this;
 
@@ -26,11 +23,16 @@ public class Inventory : MonoBehaviour
             Player.Freeze(isInventoryOpen);
         };
 
-        // get ui inventory cells
-        for (int i = 0; i < inventoryCapacity; i++)
+        #region Set the cells in a list
+        QuickAccessInventory quickAccessCellsContainer = FindObjectOfType<QuickAccessInventory>();
+
+        // firstly get cells from quick access to make picked up items go there first
+        for (int i = 0; i < quickAccessCellsContainer.cellsContainer.childCount; i++)
         {
-            cells.Add(cellsContainer.transform.GetChild(i).GetComponent<ItemCell>());
+            cells.Add(quickAccessCellsContainer.cellsContainer.GetChild(i).GetComponent<ItemCell>());
         }
+        base.Start();  // then normally get your own cells
+        #endregion
 
         // lets to set up ui inventory elements
         inventoryContainer.SetActive(true);
@@ -46,7 +48,7 @@ public class Inventory : MonoBehaviour
 
         inventory.items.Add(item);
         ItemCell freeCell = inventory.GetFirstFreeCell();
-        freeCell.SetItem(item);
+        freeCell.SetItemInCell(item);
     }
 
     ItemCell GetFirstFreeCell()
