@@ -1,0 +1,1 @@
+All models which are going to be used as hand items must be set "Read/Write" and "Generate colliders" options to true.

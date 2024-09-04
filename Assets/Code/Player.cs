@@ -78,7 +78,7 @@ public class Player : MonoBehaviour
             return;
 
         // if this action make stamina equals or less than 0, blink the bar
-        if ((Stamina - staminaDemand) <= 0)
+        if ((Stamina - staminaDemand) <= 0 && staminaDemand > 0)
         {
             player.staminaBar.Show();
             player.staminaBar.BackgroundBlink(new Color32(255, 0, 0, 1), 3, .2f);
@@ -90,13 +90,17 @@ public class Player : MonoBehaviour
 
         // perform action
         action();
-        Stamina -= staminaDemand;
-        player.staminaBar.SetBar(UIBar.ValueToBarFill(Stamina, player.maxStamina));
-        player.staminaBar.Show();
 
-        // restoring stamina
-        if (player.restoreStaminaRoutine != null) player.StopCoroutine(player.restoreStaminaRoutine);
-        player.restoreStaminaRoutine = player.StartCoroutine(player.RestoreStamina());
+        if (staminaDemand > 0)
+        {
+            Stamina -= staminaDemand;
+            player.staminaBar.SetBar(UIBar.ValueToBarFill(Stamina, player.maxStamina));
+            player.staminaBar.Show();
+
+            // restoring stamina
+            if (player.restoreStaminaRoutine != null) player.StopCoroutine(player.restoreStaminaRoutine);
+            player.restoreStaminaRoutine = player.StartCoroutine(player.RestoreStamina());
+        }
     }
 
     IEnumerator RestoreStamina()

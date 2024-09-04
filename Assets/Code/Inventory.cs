@@ -51,6 +51,13 @@ public class Inventory : InventoryUIBase
         freeCell.SetItemInCell(item);
     }
 
+    public static void RemoveFromInventory(Item item)
+    {
+        inventory.items.Remove(item);
+        QuickAccessInventory.selectedCell.SetItemInCell(null);
+        Hand.SetItemInHand(null, false);
+    }
+
     ItemCell GetFirstFreeCell()
     {
         for (int i = 0; i < inventoryCapacity; i++)

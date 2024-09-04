@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ItemOnGround : MonoBehaviour
@@ -20,14 +21,28 @@ public class ItemOnGround : MonoBehaviour
         model.transform.localEulerAngles = new Vector3(modelTiltAngle, 0, 0);
 
         // collect mesh renderers
-        for (int i = 0; i < model.transform.GetChild(0).childCount; i++)
+
+        // I must consider two options: if Wojtek made whole model in one object or if in more ones
+        if(model.transform.GetChild(0).childCount == 0)
         {
-            children.Add(model.transform.GetChild(0).GetChild(i).GetComponent<MeshRenderer>());
+            children.Add(model.transform.GetChild(0).GetComponent<MeshRenderer>());
+        }
+        else
+        {
+            for (int i = 0; i < model.transform.GetChild(0).childCount; i++)
+            {
+                children.Add(model.transform.GetChild(0).GetChild(i).GetComponent<MeshRenderer>());
+            }
         }
 
         // layer must be 0, default it's 'HandItem' and it make issues
         model.layer = 0;
-        children.ForEach((MeshRenderer m) => { m.gameObject.layer = 0; });
+        children.ForEach((MeshRenderer m) => {
+            m.gameObject.layer = 0;
+            Outline outline = m.AddComponent<Outline>();
+            outline.enabled = false;
+            outline.OutlineWidth = 10; // max
+        });
     }
 
     void Update()
@@ -42,9 +57,10 @@ public class ItemOnGround : MonoBehaviour
 
         // set material
         children.ForEach((MeshRenderer m) => {
-            Material[] mats = m.materials;
+            m.gameObject.GetComponent<Outline>().enabled = true;
+            /*Material[] mats = m.materials;
             mats[1] = outline;
-            m.GetComponent<MeshRenderer>().materials = mats;
+            m.GetComponent<MeshRenderer>().materials = mats;*/
         });
     }
 
@@ -54,9 +70,10 @@ public class ItemOnGround : MonoBehaviour
         isOutlined = false;
 
         children.ForEach((MeshRenderer m) => {
-            Material[] mats = m.materials;
+            m.gameObject.GetComponent<Outline>().enabled = false;
+            /*Material[] mats = m.materials;
             mats[1] = null;
-            m.GetComponent<MeshRenderer>().materials = mats;
+            m.GetComponent<MeshRenderer>().materials = mats;*/
         });
     }
 }

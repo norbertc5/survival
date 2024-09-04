@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 138304386f6ac3a43a73574e4e0999db, type: 3}
-  m_Name: Sword
+  m_Name: Apple
   m_EditorClassIdentifier: 
-  name: Sword
-  model: {fileID: 2198313782341279214, guid: 46624f345d7d2f84ca082f0ef6a7ddd5, type: 3}
-  type: 0
-  useAnimation: {fileID: 7400000, guid: ca681c62cb975d24f99cc7f32bf2a0db, type: 2}
-  uIIcon: {fileID: 21300000, guid: 1dbda55818728ce498b30b7cdb2c5af8, type: 3}
-  staminaDemand: 1
-  damage: 20
+  name: Apple
+  model: {fileID: 2432855088600113653, guid: f2f57c9930772874eaab021b15bb4a36, type: 3}
+  type: 1
+  useAnimation: {fileID: 7400000, guid: dbadd62c1a8cf8f4087a1782a830e991, type: 2}
+  uIIcon: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  staminaDemand: 0
+  damage: 0
   isHandable: 1
