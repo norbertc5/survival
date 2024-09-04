@@ -23,8 +23,8 @@ public class ItemInventoryIcon : MonoBehaviour, IDragHandler, IBeginDragHandler,
         image = GetComponent<Image>();
 
         referenceCell = rectTrans.GetComponentInParent<ItemCell>();
-        dragAction += () => { canvasGroup.blocksRaycasts = false; };
-        dropAction += () => { canvasGroup.blocksRaycasts = true; };
+        //dragAction += () => { canvasGroup.blocksRaycasts = false; };
+       // dropAction += () => { canvasGroup.blocksRaycasts = true; };
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -32,7 +32,7 @@ public class ItemInventoryIcon : MonoBehaviour, IDragHandler, IBeginDragHandler,
         rectTrans.SetParent(rectTrans.parent.parent.parent.parent);  // change parent to display icon above cells
         originPos = rectTrans.position;
         image.enabled = true;
-        dragAction?.Invoke();  // make possibility to interact with cells by disabling blocksRaycasts in all icons
+        canvasGroup.blocksRaycasts = false;  // make possibility to interact with cells by disabling blocksRaycasts in all icons
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -45,6 +45,15 @@ public class ItemInventoryIcon : MonoBehaviour, IDragHandler, IBeginDragHandler,
     {
         rectTrans.SetParent(referenceCell.transform);  // image goes back to origin parent 
         rectTrans.position = originPos;
-        dropAction?.Invoke();
+        canvasGroup.blocksRaycasts = true;
+    }
+
+    void Update()
+    {
+        // when we ate the food from cell and cell is now free, we need to disable image
+        if(image.sprite == null)
+        {
+            image.enabled = false;
+        }
     }
 }

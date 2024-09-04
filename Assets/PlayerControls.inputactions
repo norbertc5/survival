@@ -42,7 +42,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Click",
+                    "name": "Use",
                     "type": "Button",
                     "id": "9ad3c788-9ff9-436a-9191-3f9843277b28",
                     "expectedControlType": "Button",
@@ -69,13 +69,22 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ChangeItem",
+                    "name": "ChangeItemWithScroll",
                     "type": "PassThrough",
                     "id": "b0fc39e9-ca8f-4502-adff-b596f46c676c",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "ChangeItemWithNumbers",
+                    "type": "Button",
+                    "id": "c0db2fe6-d15b-4efb-9caa-1488a00443b5",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -185,7 +194,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Click",
+                    "action": "Use",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -218,7 +227,40 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ChangeItem",
+                    "action": "ChangeItemWithScroll",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b9fd164f-7edb-4049-9a17-6f7718492ff9",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "Scale",
+                    "groups": "KeyboardAndMouse",
+                    "action": "ChangeItemWithNumbers",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8f5400d0-db98-4dca-ac0d-a0aefd189769",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "Scale(factor=2)",
+                    "groups": "KeyboardAndMouse",
+                    "action": "ChangeItemWithNumbers",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "feb38481-5866-484d-aa8c-5514c705668d",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "Scale(factor=3)",
+                    "groups": "KeyboardAndMouse",
+                    "action": "ChangeItemWithNumbers",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

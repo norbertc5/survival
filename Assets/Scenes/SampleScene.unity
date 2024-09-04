@@ -2782,7 +2782,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1362848348}
-  - component: {fileID: 1362848349}
   m_Layer: 5
   m_Name: QuickAccessInventory
   m_TagString: Untagged
@@ -2812,23 +2811,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -242.7}
   m_SizeDelta: {x: 252.2795, y: 69.5441}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1362848349
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1362848347}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c63ca38e6204d5a4cace1c8ebf4a4b0b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inventoryCapacity: 3
-  cellsContainer: {fileID: 1212753665}
-  changeItemAction: {fileID: -8740614690763886811, guid: 36b7930dc5620ea45a0f5f1e8b114296,
-    type: 3}
-  frame: {fileID: 612472025}
 --- !u!224 &1407817972 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 180628780578588114, guid: 4fed10753c90e1343bb8fe45eec0943f,
@@ -4862,6 +4844,7 @@ GameObject:
   - component: {fileID: 7974811431344200555}
   - component: {fileID: 8909345215556785826}
   - component: {fileID: 8909345215556785827}
+  - component: {fileID: 8909345215556785828}
   m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
@@ -5119,6 +5102,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: b0fc39e9-ca8f-4502-adff-b596f46c676c
     m_ActionName: Gameplay/ChangeItem[/Mouse/scroll]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c0db2fe6-d15b-4efb-9caa-1488a00443b5
+    m_ActionName: Gameplay/ChangeItemWithNumbers[/Keyboard/1,/Keyboard/2,/Keyboard/3]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: KeyboardAndMouse
   m_DefaultActionMap: Gameplay
@@ -5653,6 +5640,25 @@ MonoBehaviour:
     type: 3}
   inventoryContainer: {fileID: 562460199}
   items: []
+--- !u!114 &8909345215556785828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3194992397283607662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c63ca38e6204d5a4cace1c8ebf4a4b0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventoryCapacity: 3
+  cellsContainer: {fileID: 1212753665}
+  changeItemAction: {fileID: -8740614690763886811, guid: 36b7930dc5620ea45a0f5f1e8b114296,
+    type: 3}
+  changeItemKeysAction: {fileID: -8202278955702311047, guid: 36b7930dc5620ea45a0f5f1e8b114296,
+    type: 3}
+  frame: {fileID: 612472025}
 --- !u!136 &9203206100461807665
 CapsuleCollider:
   m_ObjectHideFlags: 0
