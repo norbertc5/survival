@@ -2,11 +2,12 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ItemCell : MonoBehaviour, IDropHandler
+public class ItemCell : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
 {
     Image icon;
     public Item itemInCell;
     public bool isSelectedCell;
+    public static bool isHoldingIcon;
 
     void Start()
     {
@@ -32,6 +33,7 @@ public class ItemCell : MonoBehaviour, IDropHandler
         {
             Hand.SetItemInHand(QuickAccessInventory.selectedCell.itemInCell);
         }
+        isHoldingIcon = false;
     }
 
     /// <summary>
@@ -58,5 +60,17 @@ public class ItemCell : MonoBehaviour, IDropHandler
         {
             icon.sprite = null;
         }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (!itemInCell || isHoldingIcon)
+            return;
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (!itemInCell)
+            return;
     }
 }

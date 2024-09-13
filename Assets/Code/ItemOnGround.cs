@@ -9,7 +9,6 @@ public class ItemOnGround : MonoBehaviour
     [SerializeField] float rotationSpeed = 1;
     [SerializeField] float modelSize = 0.5f;
     [SerializeField] float modelTiltAngle = 45;
-    [SerializeField] Material outline;
     bool isOutlined;
     List<MeshRenderer> children = new List<MeshRenderer>();
 
@@ -36,7 +35,7 @@ public class ItemOnGround : MonoBehaviour
         }
 
         // layer must be 0, default it's 'HandItem' and it make issues
-        model.layer = 0;
+        //model.layer = 0;
         children.ForEach((MeshRenderer m) => {
             m.gameObject.layer = 0;
             Outline outline = m.AddComponent<Outline>();
@@ -58,9 +57,6 @@ public class ItemOnGround : MonoBehaviour
         // set material
         children.ForEach((MeshRenderer m) => {
             m.gameObject.GetComponent<Outline>().enabled = true;
-            /*Material[] mats = m.materials;
-            mats[1] = outline;
-            m.GetComponent<MeshRenderer>().materials = mats;*/
         });
     }
 
@@ -71,9 +67,6 @@ public class ItemOnGround : MonoBehaviour
 
         children.ForEach((MeshRenderer m) => {
             m.gameObject.GetComponent<Outline>().enabled = false;
-            /*Material[] mats = m.materials;
-            mats[1] = null;
-            m.GetComponent<MeshRenderer>().materials = mats;*/
         });
     }
 }

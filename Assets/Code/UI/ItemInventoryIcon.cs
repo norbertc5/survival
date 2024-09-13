@@ -23,8 +23,6 @@ public class ItemInventoryIcon : MonoBehaviour, IDragHandler, IBeginDragHandler,
         image = GetComponent<Image>();
 
         referenceCell = rectTrans.GetComponentInParent<ItemCell>();
-        //dragAction += () => { canvasGroup.blocksRaycasts = false; };
-       // dropAction += () => { canvasGroup.blocksRaycasts = true; };
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -33,6 +31,7 @@ public class ItemInventoryIcon : MonoBehaviour, IDragHandler, IBeginDragHandler,
         originPos = rectTrans.position;
         image.enabled = true;
         canvasGroup.blocksRaycasts = false;  // make possibility to interact with cells by disabling blocksRaycasts in all icons
+        ItemCell.isHoldingIcon = true;
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -43,6 +42,12 @@ public class ItemInventoryIcon : MonoBehaviour, IDragHandler, IBeginDragHandler,
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        // drop item on ground only if beyond inventory ui
+        if (!EventSystem.current.IsPointerOverGameObject())
+        {
+            Inventory.Drop(referenceCell.itemInCell, referenceCell);
+        }
+
         rectTrans.SetParent(referenceCell.transform);  // image goes back to origin parent 
         rectTrans.position = originPos;
         canvasGroup.blocksRaycasts = true;

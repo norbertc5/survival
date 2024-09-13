@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5658953254697879066}
   - component: {fileID: 7132085872942823127}
   - component: {fileID: 2805370174676757265}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: ItemOnGround
   m_TagString: ItemOnGround
   m_Icon: {fileID: 0}
@@ -49,7 +49,6 @@ MonoBehaviour:
   rotationSpeed: 100
   modelSize: 1
   modelTiltAngle: 0
-  outline: {fileID: 2100000, guid: eb1e5af16755c4a43a5f4281ac6adbc8, type: 2}
 --- !u!54 &2805370174676757265
 Rigidbody:
   m_ObjectHideFlags: 0

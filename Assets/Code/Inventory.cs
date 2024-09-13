@@ -8,9 +8,12 @@ public class Inventory : InventoryUIBase
     public static Inventory inventory;
     [SerializeField] InputActionReference inventoryToggleAction;
     [SerializeField] GameObject inventoryContainer;
+    [SerializeField] Transform dropPoint;
+    [SerializeField] float dropAreaRadius;
 
-    public List<Item> items = new List<Item>();
+    [SerializeField] public List<Item> items = new List<Item>();
     bool isInventoryOpen;
+    public ItemOnGround dropItem;
 
     protected override void Start()
     {
@@ -36,7 +39,7 @@ public class Inventory : InventoryUIBase
 
         // lets to set up ui inventory elements
         inventoryContainer.SetActive(true);
-        ActionOnTime.Create(() => { inventoryContainer.SetActive(false); }, .01f);
+        ActionOnTime.Create(() => { inventoryContainer.SetActive(false); }, .01f);        
     }
 
     public static void AddToInventory(Item item)
@@ -51,11 +54,13 @@ public class Inventory : InventoryUIBase
         freeCell.SetItemInCell(item);
     }
 
-    public static void RemoveFromInventory(Item item)
+    public static void RemoveFromInventory(Item item, ItemCell itemCell)
     {
+        itemCell.SetItemInCell(null);
+
+        if(QuickAccessInventory.selectedCell == itemCell)
+            Hand.SetItemInHand(null);
         inventory.items.Remove(item);
-        QuickAccessInventory.selectedCell.SetItemInCell(null);
-        Hand.SetItemInHand(null, false);
     }
 
     ItemCell GetFirstFreeCell()
@@ -69,5 +74,31 @@ public class Inventory : InventoryUIBase
             }
         }
         return null;
+    }
+
+    [SerializeField] LayerMask dropCheckMask;
+    public static void Drop(Item toDrop, ItemCell itemCell)
+    {
+        ItemOnGround droppedInstance = Instantiate(inventory.dropItem);
+        droppedInstance.item = toDrop;
+        ItemCell.isHoldingIcon = false;
+        float yPos = inventory.transform.position.y - .5f;  // y pos for dropped instance
+
+        // if we stand too close to obstacle, dropped item would appear into one
+        // so to prevent that, we check area around player to check if we stand too close to obstacle
+        // and if so, we place the dropped item in arranged pos
+        if (Physics.CheckSphere(inventory.transform.position, 1, inventory.dropCheckMask))
+        {
+            droppedInstance.transform.position = new Vector3(inventory.transform.position.x, yPos, inventory.transform.position.z);
+            droppedInstance.transform.position += droppedInstance.transform.forward / 5;
+        }
+        else
+        {
+            // place dropped in random pos but close to dropPoint
+            Vector2 circle = (Vector3)Random.insideUnitCircle * inventory.dropAreaRadius;
+            Vector3 randomPos = new Vector3(inventory.dropPoint.position.x + circle.x, yPos, circle.y + inventory.dropPoint.position.z);
+            droppedInstance.transform.position = randomPos;
+        }
+        RemoveFromInventory(toDrop, itemCell);
     }
 }

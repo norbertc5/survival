@@ -44,6 +44,7 @@ public class QuickAccessInventory : InventoryUIBase
         #region Handle keys changing
         changeItemKeysAction.action.performed += ctx => keyInput = (int)ctx.ReadValue<float>();  // read input
 
+        //                    you can't change item to one you have in hand
         if(keyInput != -1 && actualCellId != keyInput-1)
         {
             actualCellId = keyInput-1;

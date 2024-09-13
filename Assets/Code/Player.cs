@@ -57,6 +57,7 @@ public class Player : MonoBehaviour
         if (hit.transform != null && hit.transform.CompareTag("ItemOnGround"))
         {
             interactionItemNameDisplay.ShowAndSet(hit.transform.GetComponent<ItemOnGround>().item.name);
+            if(selectedItem) selectedItem.SendMessage("DisableOutline");
             selectedItem = hit.transform;
             selectedItem.SendMessage("EnableOutline");
         }
@@ -64,6 +65,7 @@ public class Player : MonoBehaviour
         {
             if (selectedItem != null) selectedItem.SendMessage("DisableOutline");
             interactionItemNameDisplay.Hide();
+            selectedItem = null;
         }
     }
 
