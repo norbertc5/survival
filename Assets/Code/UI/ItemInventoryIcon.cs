@@ -45,10 +45,11 @@ public class ItemInventoryIcon : MonoBehaviour, IDragHandler, IBeginDragHandler,
         // drop item on ground only if beyond inventory ui
         if (!EventSystem.current.IsPointerOverGameObject())
         {
-            Inventory.Drop(referenceCell.attachedSlot, referenceCell);
+            Inventory.Drop(referenceCell.attachedSlot);
         }
 
         rectTrans.SetParent(referenceCell.transform);  // image goes back to origin parent 
+        rectTrans.SetSiblingIndex(0);  // don't cover amount display
         rectTrans.position = originPos;
         canvasGroup.blocksRaycasts = true;
     }

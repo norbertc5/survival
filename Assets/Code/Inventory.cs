@@ -53,10 +53,11 @@ public class Inventory : InventoryUIBase
         }
 
         // if we have not full stack of this item in the inventory
-        Slot cellWithItem = inventory.GetSlotWithItem(item);
-        if (cellWithItem != null)
+        Slot slotWithItem = inventory.GetSlotWithItem(item, amount);
+        if (slotWithItem != null)
         {
-            inventory.GetSlotWithItem(item).amount += amount;
+            slotWithItem.amount += amount;
+            if(inventory.GetCellWithSlot(slotWithItem)) inventory.GetCellWithSlot(slotWithItem).UpdateAmountDisplay();
         }
         else  // if we don't have this item in the inventory so far
         {
@@ -64,11 +65,12 @@ public class Inventory : InventoryUIBase
             inventory.items.Add(newSlot);
             ItemCell freeCell = inventory.GetFirstFreeCell();
             freeCell.attachedSlot = newSlot;
-            freeCell.SetItemInCell(item);
+            freeCell.SetAttachedSlot(newSlot);
+            freeCell.UpdateAmountDisplay();
         }
     }
 
-    public static void RemoveFromInventory(Slot slot, ItemCell cell, int amount)
+    public static void RemoveFromInventory(Slot slot, int amount)
     {
         if(amount > slot.amount)
         {
@@ -78,41 +80,60 @@ public class Inventory : InventoryUIBase
 
         // decrease amount of the item and if we have 0 pieces, remove it completly
         slot.amount -= amount;
+        ItemCell cell = inventory.GetCellWithSlot(slot);
+        cell.UpdateAmountDisplay();
 
         if (slot.amount == 0)
         {
-            cell.SetItemInCell(null);
+            cell.attachedSlot.item = null;
+            //print(cell.attachedSlot.item);
+            cell.SetAttachedSlot(null);
 
             if (QuickAccessInventory.selectedCell == cell)
                 Hand.SetItemInHand(null);
             inventory.items.Remove(slot);
+            //cell.attachedSlot = null;
         }
     }
 
     ItemCell GetFirstFreeCell()
     {
-        for (int i = 0; i < inventoryCapacity; i++)
+        ItemCell[] cells = inventory.cells.Where(t => t.attachedSlot.item == null).Select(t => t).ToArray();
+        if (cells.Length > 0)
+            return cells[0];
+        else return null;
+
+       /* for (int i = 0; i < inventoryCapacity; i++)
         {
             ItemCell cell = cells[i];
-            if(cell.itemInCell == null)
+            print(cell.attachedSlot);
+            if (cell.attachedSlot.item == null)
             {
                 return cell;
             }
         }
-        return null;
+        return null;*/
     }
 
-    Slot GetSlotWithItem(Item item)
+    Slot GetSlotWithItem(Item item, int amountToAdd)
     {
-        Slot[] slot = inventory.items.Where(t => t.item == item && t.amount < item.maxStackSize).Select(t => t).ToArray();
+        Slot[] slot = inventory.items.Where(t => t.item == item && (t.amount + amountToAdd) <= item.maxStackSize).Select(t => t).ToArray();
         if(slot.Length > 0)
             return slot[0];
         else
             return null;
     }
 
+    ItemCell GetCellWithSlot(Slot slot)
+    {
+        ItemCell[] cells = inventory.cells.Where(t => t.attachedSlot == slot).Select(t => t).ToArray();
+        if(cells.Length > 0)
+            return cells[0];
+        else return null;
+    }
+
     [SerializeField] LayerMask dropCheckMask;
-    public static void Drop(Slot slot, ItemCell cell)
+    public static void Drop(Slot slot)
     {
         ItemOnGround droppedInstance = Instantiate(inventory.dropItem);
         droppedInstance.item = slot.item;
@@ -135,7 +156,7 @@ public class Inventory : InventoryUIBase
             Vector3 randomPos = new Vector3(inventory.dropPoint.position.x + circle.x, yPos, circle.y + inventory.dropPoint.position.z);
             droppedInstance.transform.position = randomPos;
         }
-        RemoveFromInventory(slot, cell, slot.amount);
+        RemoveFromInventory(slot, slot.amount);
     }
 }
 

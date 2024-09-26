@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 138304386f6ac3a43a73574e4e0999db, type: 3}
   m_Name: Axe
   m_EditorClassIdentifier: 
-  name: 
-  model: {fileID: 0}
+  name: Axe
+  model: {fileID: 4865755662489363930, guid: adc63e33e12854f4ba577e17be4057f4, type: 3}
   type: 0
-  useAnimation: {fileID: 0}
-  uIIcon: {fileID: 0}
+  useAnimation: {fileID: 7400000, guid: ca681c62cb975d24f99cc7f32bf2a0db, type: 2}
+  uIIcon: {fileID: 21300000, guid: e99b03061cac6cd449ba4c19b0446e89, type: 3}
   staminaDemand: 1
   damage: 10
-  isHandable: 0
+  isHandable: 1
   maxStackSize: 1

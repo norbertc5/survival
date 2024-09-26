@@ -37,7 +37,7 @@ public class QuickAccessInventory : InventoryUIBase
             selectedCell = cells[actualCellId];
             selectedCell.isSelectedCell = true;
 
-            Hand.SetItemInHand(cells[actualCellId].itemInCell);
+            Hand.SetItemInHand(cells[actualCellId].attachedSlot.item);
         }
         #endregion
 
@@ -53,7 +53,7 @@ public class QuickAccessInventory : InventoryUIBase
             selectedCell = cells[actualCellId];
             selectedCell.isSelectedCell = true;
 
-            Hand.SetItemInHand(cells[keyInput-1].itemInCell);
+            Hand.SetItemInHand(cells[keyInput-1].attachedSlot.item);
             keyInput = -1;
         }
         #endregion

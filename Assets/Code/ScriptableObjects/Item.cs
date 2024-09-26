@@ -24,7 +24,7 @@ public class Item : ScriptableObject
 public class ItemEditor : Editor
 {
     // tutorial: https://www.youtube.com/watch?v=H3pCcKnBRHw
-    public override void OnInspectorGUI()
+   /* public override void OnInspectorGUI()
     {
         var script = (Item)target;
 
@@ -41,5 +41,5 @@ public class ItemEditor : Editor
             script.staminaDemand = EditorGUILayout.IntField("Stamina Demadnd", script.staminaDemand);
             script.damage = EditorGUILayout.IntField("Damage", script.damage);
         }
-    }
+    }*/
 }
