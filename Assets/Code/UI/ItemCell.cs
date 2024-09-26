@@ -8,6 +8,7 @@ public class ItemCell : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
     public Item itemInCell;
     public bool isSelectedCell;
     public static bool isHoldingIcon;
+    public Slot attachedSlot;  // a slot where the item in this cell is stored
 
     void Start()
     {
@@ -24,12 +25,24 @@ public class ItemCell : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
         }
 
         // swap item attached to this cell
-        Item tmp = eventData.pointerDrag.GetComponent<ItemInventoryIcon>().referenceCell.itemInCell;
-        eventData.pointerDrag.GetComponent<ItemInventoryIcon>().referenceCell.SetItemInCell(itemInCell);
-        SetItemInCell(tmp);
+        if (ItemInventoryIcon.actuallyDraggingIcon.referenceCell.itemInCell != itemInCell)
+        {
+            // alter item object
+            Item tmp = ItemInventoryIcon.actuallyDraggingIcon.referenceCell.itemInCell;
+            ItemInventoryIcon.actuallyDraggingIcon.referenceCell.SetItemInCell(itemInCell);
+            SetItemInCell(tmp);
+        }
+        else if((attachedSlot.amount + ItemInventoryIcon.actuallyDraggingIcon.referenceCell.attachedSlot.amount) <= attachedSlot.item.maxStackSize)
+        {
+            // stack same items (if not too many in one cell)
+            print("takie same przedmioty");
+            attachedSlot.amount += ItemInventoryIcon.actuallyDraggingIcon.referenceCell.attachedSlot.amount;
+            ItemInventoryIcon.actuallyDraggingIcon.referenceCell.SetItemInCell(null);
+            Inventory.RemoveFromInventory(ItemInventoryIcon.actuallyDraggingIcon.referenceCell.attachedSlot, ItemInventoryIcon.actuallyDraggingIcon.referenceCell, ItemInventoryIcon.actuallyDraggingIcon.referenceCell.attachedSlot.amount);
+        }
 
         // if item dropped on this cell was previously on selected one, change item in hand according to item from selected one
-        if (eventData.pointerDrag.GetComponent<ItemInventoryIcon>().referenceCell.isSelectedCell)
+        if (ItemInventoryIcon.actuallyDraggingIcon.referenceCell.isSelectedCell)
         {
             Hand.SetItemInHand(QuickAccessInventory.selectedCell.itemInCell);
         }
@@ -66,11 +79,13 @@ public class ItemCell : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
     {
         if (!itemInCell || isHoldingIcon)
             return;
+        ItemInfo.ToggleItemInfo(true, transform.position, itemInCell.name);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         if (!itemInCell)
             return;
+        ItemInfo.ToggleItemInfo(false);
     }
 }

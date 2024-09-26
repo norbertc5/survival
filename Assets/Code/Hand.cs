@@ -59,7 +59,7 @@ public class Hand : MonoBehaviour
     public void InvokeEatBenefit()
     {
         print("You have eaten sth.");
-        Inventory.RemoveFromInventory(itemInHand, QuickAccessInventory.selectedCell);
+        Inventory.RemoveFromInventory(QuickAccessInventory.selectedCell.attachedSlot, QuickAccessInventory.selectedCell, 1);
     }
 
     Item oldItem;

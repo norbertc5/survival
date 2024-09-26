@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -11,6 +10,7 @@ public class ItemOnGround : MonoBehaviour
     [SerializeField] float modelTiltAngle = 45;
     bool isOutlined;
     List<MeshRenderer> children = new List<MeshRenderer>();
+    public int amount = 1;
 
     void Start()
     {

@@ -1,8 +1,6 @@
 using norbertcUtilities.FirstPersonMovement;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -43,7 +41,8 @@ public class Player : MonoBehaviour
             if (selectedItem == null)
                 return;
 
-            Inventory.AddToInventory(selectedItem.GetComponent<ItemOnGround>().item);
+            ItemOnGround itemFromGround = selectedItem.GetComponent<ItemOnGround>();
+            Inventory.AddToInventory(itemFromGround.item, itemFromGround.amount);
             selectedItem.gameObject.SetActive(false);
             selectedItem = null;
         };

@@ -10,10 +10,9 @@ public class ItemInventoryIcon : MonoBehaviour, IDragHandler, IBeginDragHandler,
     CanvasGroup canvasGroup;
     public ItemCell referenceCell;
     Image image;
+    public static ItemInventoryIcon actuallyDraggingIcon;
 
     Vector2 originPos;
-    public static Action dragAction;
-    public static Action dropAction;
 
     void Start()
     {
@@ -32,6 +31,7 @@ public class ItemInventoryIcon : MonoBehaviour, IDragHandler, IBeginDragHandler,
         image.enabled = true;
         canvasGroup.blocksRaycasts = false;  // make possibility to interact with cells by disabling blocksRaycasts in all icons
         ItemCell.isHoldingIcon = true;
+        actuallyDraggingIcon = this;
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -45,7 +45,7 @@ public class ItemInventoryIcon : MonoBehaviour, IDragHandler, IBeginDragHandler,
         // drop item on ground only if beyond inventory ui
         if (!EventSystem.current.IsPointerOverGameObject())
         {
-            Inventory.Drop(referenceCell.itemInCell, referenceCell);
+            Inventory.Drop(referenceCell.attachedSlot, referenceCell);
         }
 
         rectTrans.SetParent(referenceCell.transform);  // image goes back to origin parent 

@@ -11,10 +11,11 @@ public class Item : ScriptableObject
     public GameObject model;
     public Type type;
     public AnimationClip useAnimation;
-    public Sprite uIIcon;
+    [SerializeReference] public Sprite uIIcon;
     public int staminaDemand = 1;
     public int damage = 10;
     public bool isHandable;
+    public int maxStackSize = 1;
 
     public enum Type { weapon, food};
 }
@@ -33,6 +34,7 @@ public class ItemEditor : Editor
         script.useAnimation = EditorGUILayout.ObjectField("Use Animation", script.useAnimation, typeof(AnimationClip), false) as AnimationClip;
         script.uIIcon = EditorGUILayout.ObjectField("UI Icon", script.uIIcon, typeof(Sprite), false) as Sprite;
         script.isHandable = EditorGUILayout.Toggle("Is Handable", script.isHandable);
+        script.maxStackSize = EditorGUILayout.IntField("Max Stack Size", script.maxStackSize);
 
         if(script.type == Item.Type.weapon)
         {
