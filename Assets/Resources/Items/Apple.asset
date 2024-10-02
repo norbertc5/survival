@@ -20,4 +20,4 @@ MonoBehaviour:
   staminaDemand: 1
   damage: 10
   isHandable: 1
-  maxStackSize: 1
+  maxStackSize: 3

@@ -85,6 +85,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "SplitStack",
+                    "type": "Button",
+                    "id": "65829c9f-e3ce-4e24-9f10-e1a6872566c2",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -261,6 +270,17 @@
                     "processors": "Scale(factor=3)",
                     "groups": "KeyboardAndMouse",
                     "action": "ChangeItemWithNumbers",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "521b22b9-4db4-4a5b-8230-f95b7a237144",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SplitStack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

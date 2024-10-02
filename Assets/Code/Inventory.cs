@@ -26,6 +26,7 @@ public class Inventory : InventoryUIBase
             isInventoryOpen = !isInventoryOpen;
             inventoryContainer.SetActive(isInventoryOpen);
             Player.Freeze(isInventoryOpen);
+            StackSplit.ToggleStackSplitMenu(false);
         };
 
         #region Set the cells in a list
@@ -86,13 +87,11 @@ public class Inventory : InventoryUIBase
         if (slot.amount == 0)
         {
             cell.attachedSlot.item = null;
-            //print(cell.attachedSlot.item);
             cell.SetAttachedSlot(null);
 
             if (QuickAccessInventory.selectedCell == cell)
                 Hand.SetItemInHand(null);
             inventory.items.Remove(slot);
-            //cell.attachedSlot = null;
         }
     }
 
@@ -102,17 +101,6 @@ public class Inventory : InventoryUIBase
         if (cells.Length > 0)
             return cells[0];
         else return null;
-
-       /* for (int i = 0; i < inventoryCapacity; i++)
-        {
-            ItemCell cell = cells[i];
-            print(cell.attachedSlot);
-            if (cell.attachedSlot.item == null)
-            {
-                return cell;
-            }
-        }
-        return null;*/
     }
 
     Slot GetSlotWithItem(Item item, int amountToAdd)
@@ -156,7 +144,8 @@ public class Inventory : InventoryUIBase
             Vector3 randomPos = new Vector3(inventory.dropPoint.position.x + circle.x, yPos, circle.y + inventory.dropPoint.position.z);
             droppedInstance.transform.position = randomPos;
         }
-        RemoveFromInventory(slot, slot.amount);
+        if(inventory.items.Contains(slot))
+            RemoveFromInventory(slot, slot.amount);
     }
 }
 

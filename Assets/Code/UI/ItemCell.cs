@@ -3,10 +3,9 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ItemCell : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
+public class ItemCell : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     Image icon;
-    //public Item itemInCell;
     public bool isSelectedCell;
     public static bool isHoldingIcon;
     public Slot attachedSlot;  // a slot where the item in this cell is stored
@@ -31,9 +30,6 @@ public class ItemCell : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
         if (ItemInventoryIcon.actuallyDraggingIcon.referenceCell.attachedSlot.item != attachedSlot.item)
         {
             // alter item object
-            /*Item tmp = ItemInventoryIcon.actuallyDraggingIcon.referenceCell.itemInCell;
-            ItemInventoryIcon.actuallyDraggingIcon.referenceCell.SetItemInCell(itemInCell);*/
-            print("na pustym");
             Slot tmp = ItemInventoryIcon.actuallyDraggingIcon.referenceCell.attachedSlot;
             ItemInventoryIcon.actuallyDraggingIcon.referenceCell.SetAttachedSlot(attachedSlot);
             SetAttachedSlot(tmp);
@@ -41,7 +37,6 @@ public class ItemCell : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
         else if((attachedSlot.amount + ItemInventoryIcon.actuallyDraggingIcon.referenceCell.attachedSlot.amount) <= attachedSlot.item.maxStackSize)
         {
             // stack same items (if not too many in one cell)
-            print("takie same przedmioty");
             attachedSlot.amount += ItemInventoryIcon.actuallyDraggingIcon.referenceCell.attachedSlot.amount;
             ItemInventoryIcon.actuallyDraggingIcon.referenceCell.SetAttachedSlot(null);
             Inventory.RemoveFromInventory(ItemInventoryIcon.actuallyDraggingIcon.referenceCell.attachedSlot, ItemInventoryIcon.actuallyDraggingIcon.referenceCell.attachedSlot.amount);
@@ -104,5 +99,26 @@ public class ItemCell : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
             amountDisplay.text = attachedSlot.amount.ToString();
         else
             amountDisplay.text = "";
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        // when already dragging separated item
+        if(StackSplit.isDraggingSeparatedIcon)
+        {
+            if (attachedSlot.item == null)
+            {
+                Slot newSlot = StackSplit.separatedSlot;
+                SetAttachedSlot(newSlot);
+                Inventory.inventory.items.Add(newSlot);
+                StackSplit.ToggleSplitIcon(false);
+                StackSplit.editingCell = null;
+                UpdateAmountDisplay();
+                return;
+            }
+        }
+
+        if(eventData.button != PointerEventData.InputButton.Right || attachedSlot.amount <= 1) return;  // block spliting when not possible
+        StackSplit.ToggleStackSplitMenu(true, this, attachedSlot.amount);  // split when clicked right click on the cell
     }
 }
